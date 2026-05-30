@@ -1,0 +1,31 @@
+[project]
+name = "officeqa-eval"
+version = "0.1.0"
+description = "OfficeQA agent-harness evaluation across Claude / OpenAI / Google / Microsoft SDKs via OpenRouter"
+requires-python = ">=3.11"
+dependencies = [
+    # Provider agent SDKs
+    "claude-agent-sdk>=0.1.0",
+    "openai-agents>=0.0.10",
+    "google-adk>=0.1.0",
+    # Microsoft Agent Framework: use the minimal subpackages instead of the
+    # umbrella `agent-framework`, which pulls in Azure AI Search pre-releases
+    # that break dependency resolution.
+    "agent-framework-core",
+    "agent-framework-openai",
+    # LiteLLM gives Google ADK an OpenRouter transport
+    "litellm>=1.50.0",
+    # OpenAI client (also used by Microsoft Agent Framework underneath)
+    "openai>=1.50.0",
+    # Anthropic client (used by Claude SDK)
+    "anthropic>=0.40.0",
+    # Utilities
+    "python-dotenv>=1.0.0",
+    "pandas>=2.0.0",
+    "tabulate>=0.9.0",
+    "tenacity>=8.0.0",
+]
+
+[tool.setuptools]
+py-modules = ["config", "corpus", "tools", "prompts", "scoring", "run_eval", "score_results", "tools_test"]
+packages = ["runners"]
