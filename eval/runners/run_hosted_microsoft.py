@@ -77,17 +77,17 @@ def _build_agent(model: str):
     # OpenAIChatCompletionClient wraps openai.AsyncOpenAI and accepts the same
     # connection params. default_headers is forwarded to every HTTP request,
     # which is how Cloudflare Access credentials are injected.
-    # Thinking is disabled server-side via vLLM --default-chat-template-kwargs.
-    # Sampling params from Qwen3.6-35B-A3B model card (non-thinking/instruct mode).
+    # Sampling params from Qwen3.6-35B-A3B model card — THINKING MODE.
+    # Thinking tokens are stripped server-side by --reasoning-parser qwen3.
     client = OpenAIChatCompletionClient(
         model=model,
         # vLLM requires a non-empty key; real auth is done by the CF headers.
         api_key="dummy",
         base_url=require_hosted_base_url(),
         default_headers=cf_headers,
-        temperature=0.7,
-        top_p=0.8,
-        max_tokens=8192,
+        temperature=1.0,
+        top_p=0.95,
+        max_tokens=16384,
     )
     return client.as_agent(
         instructions=SYSTEM_PROMPT,
