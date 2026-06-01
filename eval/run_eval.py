@@ -23,6 +23,10 @@ SDK_MODULES = {
     "openai": "runners.run_openai",
     "google": "runners.run_google",
     "microsoft": "runners.run_microsoft",
+    # Self-hosted OpenAI-compatible endpoint (vLLM / LiteLLM / Cloudflare)
+    "hosted_openai": "runners.run_hosted_openai",
+    "hosted_microsoft": "runners.run_hosted_microsoft",
+    "hosted_google": "runners.run_hosted_google",
 }
 
 
