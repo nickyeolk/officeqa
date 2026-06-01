@@ -99,10 +99,15 @@ def _build_agent(model: str) -> Agent:
             openai_client=client,
         ),
         tools=[read_file, glob, grep],
-        # Disable Qwen3 thinking mode to keep token usage in line with other
-        # runners. Remove this kwarg if you want extended reasoning.
+        # Sampling params from Qwen3.6-35B-A3B model card (non-thinking/instruct mode).
+        # Thinking is disabled server-side via vLLM --default-chat-template-kwargs.
+        # max_tokens caps per-turn completion length (thinking off → 8K is generous).
+        # top_k / presence_penalty are passed via extra_body (not native ModelSettings fields).
         model_settings=ModelSettings(
-            extra_body={"chat_template_kwargs": {"enable_thinking": False}},
+            temperature=0.7,
+            top_p=0.8,
+            max_tokens=8192,
+            extra_body={"top_k": 20, "presence_penalty": 1.5},
         ),
     )
 

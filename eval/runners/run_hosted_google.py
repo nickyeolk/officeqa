@@ -105,12 +105,17 @@ def _build_runner(model: str) -> Runner:
     # (the real auth is the Cloudflare headers).
     # extra_headers are forwarded verbatim on every HTTP call.
     # extra_body disables Qwen3 thinking mode to reduce token usage.
+    # Sampling params from Qwen3.6-35B-A3B model card (non-thinking/instruct mode).
+    # Thinking is disabled server-side via vLLM --default-chat-template-kwargs.
     llm = LiteLlm(
         model=f"openai/{model}",
         api_base=base_url,
         api_key="dummy",
         extra_headers=cf_headers,
-        extra_body={"chat_template_kwargs": {"enable_thinking": False}},
+        temperature=0.7,
+        top_p=0.8,
+        max_tokens=8192,
+        extra_body={"top_k": 20, "presence_penalty": 1.5},
     )
     agent = LlmAgent(
         name="OfficeQA",
